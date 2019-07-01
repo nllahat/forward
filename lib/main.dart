@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:forward/app.dart';
+// import 'package:forward/app.dart';
+import 'package:forward/pages/signup_page.dart';
 
 void main() => runApp(new MyApp());
 
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.grey,
       ),
-      home: new App(),
+      home: SignUpPage(),
     );
   }
 }
