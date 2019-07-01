@@ -6,11 +6,13 @@ class AppFormInput extends StatefulWidget {
   final Icon inputIcon;
   final String labelText;
   final TextInputType inputType;
+  final String hintText;
 
   AppFormInput(
       {@required this.inputKey,
       @required this.labelText,
       @required this.inputType,
+      this.hintText,
       this.inputIcon,
       this.validator});
 
@@ -19,7 +21,6 @@ class AppFormInput extends StatefulWidget {
 }
 
 class _AppFormInputState extends State<AppFormInput> {
-
   @override
   void initState() {
     super.initState();
@@ -39,6 +40,7 @@ class _AppFormInputState extends State<AppFormInput> {
         keyboardType: widget.inputType,
         validator: widget.validator,
         decoration: InputDecoration(
+          hintText: widget.hintText,
           prefixIcon: widget.inputIcon,
           labelText: widget.labelText,
           enabledBorder: OutlineInputBorder(

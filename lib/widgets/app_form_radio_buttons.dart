@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class AppFormRadioButtons extends StatefulWidget {
   final List<GroupModel> buttons;
+  final Function(int selectedIndex) onChangeButton;
 
-  AppFormRadioButtons({this.buttons});
+  AppFormRadioButtons({@required this.buttons, @required this.onChangeButton});
 
   @override
   _AppFormRadioButtonsState createState() => _AppFormRadioButtonsState();
@@ -24,6 +25,7 @@ class _AppFormRadioButtonsState extends State<AppFormRadioButtons> {
                 onChanged: (val) {
                   setState(() {
                     _currentIndex = val;
+                    widget.onChangeButton(_currentIndex);
                   });
                 },
               )))

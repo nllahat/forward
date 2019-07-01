@@ -13,6 +13,10 @@ class _AppFromDatePickerState extends State<AppFromDatePicker> {
 
   @override
   Widget build(BuildContext context) {
+    if (_today == null) {
+      return Container();
+    }
+
     return ListTile(
       onTap: () {
         DatePicker.showDatePicker(context,
@@ -33,7 +37,7 @@ class _AppFromDatePickerState extends State<AppFromDatePicker> {
       },
       leading: const Icon(Icons.today),
       title: const Text('Birthday'),
-      subtitle: Text(DateFormat('dd-MM-yyyy').format(_selectedDate)),
+      subtitle: _selectedDate != null ? Text(DateFormat('dd-MM-yyyy').format(_selectedDate)) : Text('Press to select a date'),
     );
   }
 }
