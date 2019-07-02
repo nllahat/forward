@@ -23,10 +23,14 @@ class User {
       this.gender});
 
   factory User.fromJson(Map<String, dynamic> json) => new User(
-        firebaseUserId: json["userId"],
+        id: json["id"],
+        firebaseUserId: json["firebaseUserId"],
         firstName: json["firstName"],
         lastName: json["lastName"],
+        phoneNumber: json["phoneNumber"],
         email: json["email"],
+        birthDate: json["birthDate"],
+        gender: json["gender"],
       );
 
   Map<String, dynamic> toJson() => {

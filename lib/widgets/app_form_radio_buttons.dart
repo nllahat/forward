@@ -19,6 +19,7 @@ class _AppFormRadioButtonsState extends State<AppFormRadioButtons> {
       children: widget.buttons
           .map((item) => Flexible(
                   child: RadioListTile(
+                activeColor: Colors.pink,
                 groupValue: _currentIndex,
                 title: Text("${item.text}"),
                 value: item.index,
@@ -34,8 +35,9 @@ class _AppFormRadioButtonsState extends State<AppFormRadioButtons> {
   }
 }
 
-class GroupModel {
+class GroupModel<Type> {
   String text;
   int index;
-  GroupModel({this.text, this.index});
+  Type value;
+  GroupModel({this.text, this.index, this.value});
 }

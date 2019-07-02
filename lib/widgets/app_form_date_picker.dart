@@ -3,6 +3,10 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
 class AppFromDatePicker extends StatefulWidget {
+  final Function(DateTime date) onDateChange;
+
+  AppFromDatePicker({@required this.onDateChange});
+
   @override
   _AppFromDatePickerState createState() => _AppFromDatePickerState();
 }
@@ -30,6 +34,7 @@ class _AppFromDatePickerState extends State<AppFromDatePicker> {
                 doneStyle: TextStyle(color: Colors.pink, fontSize: 16)),
             onConfirm: (date) {
           if (date != null) {
+            widget.onDateChange(date);
             setState(() => _selectedDate = date);
           }
           // selectedDate = date;

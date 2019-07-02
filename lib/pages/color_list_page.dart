@@ -9,12 +9,6 @@ class ColorsListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            title,
-          ),
-          backgroundColor: color,
-        ),
         body: Container(
           color: Colors.white,
           child: _buildList(),

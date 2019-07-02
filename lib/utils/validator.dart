@@ -26,11 +26,11 @@ class Validator {
       return null;
   }
 
-  static String validateNumber(String value) {
-    Pattern pattern = r'^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})$';
+  static String validatePhoneNumber(String value) {
+    Pattern pattern = r'^(?:[+0]9)?[0-9]{10,11}$';
     RegExp regex = new RegExp(pattern);
     if (!regex.hasMatch(value))
-      return 'Please enter a number.';
+      return 'Please enter a valid phone number.';
     else
       return null;
   }

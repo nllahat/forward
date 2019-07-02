@@ -41,7 +41,7 @@ class UserRepository {
     }
   }
 
-  Future<void> addUser() {
+  /* Future<void> addUser() {
     Map<String, dynamic> dataMap = new Map<String, dynamic>();
 
     dataMap['user'] = _db.document('users/' + userId);
@@ -56,5 +56,5 @@ class UserRepository {
       print(e);
       return;
     });
-  }
+  } */
 }
