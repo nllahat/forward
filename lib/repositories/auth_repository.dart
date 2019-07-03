@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:forward/models/user_model.dart';
-import 'package:forward/repositories/user_repository.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated, NoUser }
@@ -18,7 +17,6 @@ class AuthRepository with ChangeNotifier {
   AppUser appUser = new AppUser();
   GoogleSignIn _googleSignIn;
   Status _status = Status.Uninitialized;
-  UserRepository _userRepository = new UserRepository();
 
   AuthRepository.instance()
       : _auth = FirebaseAuth.instance,
@@ -118,9 +116,10 @@ class AuthRepository with ChangeNotifier {
     return Future.delayed(Duration.zero);
   }
 
-  Future getCurrentUser() {
+  Future<FirebaseUser> getCurrentUser() {
     return FirebaseAuth.instance.currentUser();
   }
+
 
   Future<void> _onAuthStateChanged(FirebaseUser firebaseUser) async {
     if (firebaseUser == null) {

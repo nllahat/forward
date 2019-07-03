@@ -4,7 +4,6 @@ enum Gender { Female, Male }
 
 class User {
   final String id;
-  final String firebaseUserId;
   final String firstName;
   final String lastName;
   final String phoneNumber;
@@ -13,8 +12,8 @@ class User {
   final Gender gender;
 
   User(
-      {this.id,
-      this.firebaseUserId,
+      {
+      this.id,
       this.firstName,
       this.lastName,
       this.phoneNumber,
@@ -24,7 +23,6 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => new User(
         id: json["id"],
-        firebaseUserId: json["firebaseUserId"],
         firstName: json["firstName"],
         lastName: json["lastName"],
         phoneNumber: json["phoneNumber"],
@@ -34,10 +32,13 @@ class User {
       );
 
   Map<String, dynamic> toJson() => {
-        "firebaseUserId": firebaseUserId,
+        "id": id,
         "firstName": firstName,
         "lastName": lastName,
+        "phoneNumber": phoneNumber,
         "email": email,
+        "birthDate": birthDate,
+        "gender": gender == Gender.Female ? 'female' : 'male',
       };
 
   factory User.fromFirestore(DocumentSnapshot doc) {
@@ -45,10 +46,11 @@ class User {
 
     return User(
         id: doc.documentID,
-        firebaseUserId: doc['firebaseUserId'] ?? '',
         firstName: data['firstName'] ?? '',
         lastName: data['lastName'] ?? '',
         phoneNumber: data['phoneNumber'] ?? '',
+        email: data['email'] ?? '',
+        gender: data['gender'] == 'female' ? Gender.Female : Gender.Male,
         birthDate: data['birthDate'].toDate());
   }
 }

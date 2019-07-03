@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:forward/models/user_model.dart';
 
 class UserRepository {
-  final Firestore _db = Firestore.instance;
+  static final Firestore _db = Firestore.instance;
 
   Stream<List<User>> streamUsers() {
     var ref = _db.collection('users');
@@ -12,7 +12,7 @@ class UserRepository {
   }
 
   /// Get a stream of a single document
-  Stream<User> streamUser(String id) {
+  static Stream<User> streamUser(String id) {
     return _db
         .collection('users')
         .document(id)
@@ -21,7 +21,7 @@ class UserRepository {
   }
 
   /// Get a single document
-  Future<User> getUser(String id) async {
+  static Future<User> getUser(String id) async {
     DocumentSnapshot doc = await _db.collection('users').document(id).get();
 
     return User.fromFirestore(doc);
@@ -41,20 +41,30 @@ class UserRepository {
     }
   }
 
-  /* Future<void> addUser() {
-    Map<String, dynamic> dataMap = new Map<String, dynamic>();
+  static Future<bool> checkUserExist(String userId) async {
+    bool exists = false;
+    try {
+      await Firestore.instance.document("users/$userId").get().then((doc) {
+        if (doc.exists)
+          exists = true;
+        else
+          exists = false;
+      });
+      return exists;
+    } catch (e) {
+      return false;
+    }
+  }
 
-    dataMap['user'] = _db.document('users/' + userId);
-    dataMap['event'] = _db.document('events/' + eventId);
-    dataMap['timestamp'] = Timestamp.now();
-    dataMap['isCanceled'] = false;
-    dataMap['extraGuests'] = extraGuests;
-
-    return _db.collection('registrations').add(dataMap).then((onValue) {
-      return;
-    }).catchError((e) {
-      print(e);
-      return;
+  static void addUser(User user) {
+    checkUserExist(user.id).then((value) {
+      if (!value) {
+        Firestore.instance
+            .document("users/${user.id}")
+            .setData(user.toJson());
+      } else {
+        print("user ${user.firstName} ${user.email} exists");
+      }
     });
-  } */
+  }
 }

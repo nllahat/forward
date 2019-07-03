@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:forward/models/user_model.dart';
 import 'package:forward/repositories/auth_repository.dart';
+import 'package:forward/repositories/user_repository.dart';
 import 'package:forward/utils/validator.dart';
 import 'package:forward/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -54,25 +56,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
-    final password = TextFormField(
-      autofocus: false,
-      obscureText: true,
-      controller: _password,
-      validator: Validator.validatePassword,
-      decoration: InputDecoration(
-        prefixIcon: Padding(
-          padding: EdgeInsets.only(left: 5.0),
-          child: Icon(
-            Icons.lock,
-            color: Colors.grey,
-          ), // icon is 48px widget.
-        ), // icon is 48px widget.
-        hintText: 'Password',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-      ),
-    );
-
     final loginButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
@@ -80,12 +63,11 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          _emailLogin(
-              email: _email.text, password: _password.text, context: context);
+          _login(context: context);
         },
         padding: EdgeInsets.all(12),
         color: Theme.of(context).primaryColor,
-        child: Text('SIGN IN', style: TextStyle(color: Colors.white)),
+        child: Text('SIGN IN WITH GOOGLE', style: TextStyle(color: Colors.white)),
       ),
     );
 
@@ -125,12 +107,10 @@ class _LoginPageState extends State<LoginPage> {
                     children: <Widget>[
                       logo,
                       SizedBox(height: 48.0),
-                      email,
-                      SizedBox(height: 24.0),
-                      password,
-                      SizedBox(height: 12.0),
+                      // email,
+                      // SizedBox(height: 12.0),
                       loginButton,
-                      forgotLabel,
+                      // forgotLabel,
                       signUpLabel
                     ],
                   ),
@@ -148,21 +128,22 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void _emailLogin(
-      {String email, String password, BuildContext context}) async {
-    if (_formKey.currentState.validate()) {
-      try {
-        SystemChannels.textInput.invokeMethod('TextInput.hide');
-        await _changeLoadingVisible();
-        //need await so it has chance to go through error if found.
-        /* await StateWidget.of(context).logInUser(email, password);
-        await Navigator.pushNamed(context, '/'); */
-      } catch (e) {
-        _changeLoadingVisible();
-        print("Sign In Error: $e");
+  void _login({BuildContext context}) async {
+    final authRepository = Provider.of<AuthRepository>(context);
+
+    try {
+      await _changeLoadingVisible();
+      bool result = await authRepository.signInWithGoogle();
+
+      if (result == true) {
+        if (!await UserRepository.checkUserExist(
+            authRepository.appUser.firebaseUser.uid)) {
+          authRepository.waitingForSignUp();
+        }
       }
-    } else {
-      setState(() => _autoValidate = true);
+    } catch (e) {
+      _changeLoadingVisible();
+      print("Sign In Error: $e");
     }
   }
 }

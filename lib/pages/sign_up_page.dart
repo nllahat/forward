@@ -147,7 +147,7 @@ class _SignUpPageState extends State<SignUpPage> {
           _signUp(
               firstName: _firstName.text,
               lastName: _lastName.text,
-              email: _email.text,
+              // email: _email.text,
               phoneNumber: _phone.text,
               birthDate: _signUpBirthDate,
               gender: _genderGroup[_selectedGenderIndex].value,
@@ -189,8 +189,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       SizedBox(height: 24.0),
                       lastName,
                       SizedBox(height: 24.0),
-                      email,
-                      SizedBox(height: 24.0),
                       phoneNumber,
                       SizedBox(height: 24.0),
                       birthDate,
@@ -215,93 +213,9 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
-  Future<void> verifyPhone(AuthRepository authRepo, String phoneNumber) async {
-    final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
-      this.verificationId = verId;
-    };
-
-    final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
-      this.verificationId = verId;
-      smsCodeDialog(context).then((value) {
-        print('Signed in');
-      });
-    };
-
-    final PhoneVerificationCompleted verifiedSuccess = (AuthCredential user) {
-      print('verified');
-    };
-
-    final PhoneVerificationFailed veriFailed = (AuthException exception) {
-      print('${exception.message}');
-    };
-
-    await authRepo.sendCodeToPhoneNumber(
-        phoneNumber, 5, autoRetrieve, smsCodeSent, verifiedSuccess, veriFailed);
-  }
-
-  Future<bool> smsCodeDialog(BuildContext context) {
-    final TextEditingController _smsCode = new TextEditingController();
-    final smsCode = TextFormField(
-      keyboardType: TextInputType.number,
-      autofocus: false,
-      controller: _smsCode,
-      decoration: InputDecoration(
-        prefixIcon: Padding(
-          padding: EdgeInsets.only(left: 5.0),
-          child: Icon(
-            Icons.sms,
-            color: Colors.grey,
-          ), // icon is 48px widget.
-        ), // icon is 48px widget.
-        hintText: 'SMS code',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-      ),
-    );
-
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          AuthRepository authRepository = Provider.of<AuthRepository>(context);
-          return new AlertDialog(
-            title: Text('Enter SMS Code'),
-            content: smsCode,
-            contentPadding: EdgeInsets.all(10.0),
-            actions: <Widget>[
-              new FlatButton(
-                child: Text('Done'),
-                onPressed: () {
-                  authRepository.getCurrentUser().then((user) async {
-                    if (user != null) {
-                      Navigator.of(context).pop();
-                      // Navigator.of(context).pushReplacementNamed('/homepage');
-                    } else {
-                      await signIn(
-                          authRepository, this.verificationId, _smsCode.text);
-                      Navigator.of(context).pop();
-                    }
-                  });
-                },
-              )
-            ],
-          );
-        });
-  }
-
-  Future<void> signIn(
-      AuthRepository authRepo, String verificationId, String smsCode) {
-    return authRepo.signInWithPhoneNumber(smsCode, verificationId).then((user) {
-      return;
-    }).catchError((e) {
-      print(e);
-    });
-  }
-
   void _signUp(
       {String firstName,
       String lastName,
-      String email,
       String phoneNumber,
       DateTime birthDate,
       Gender gender,
@@ -311,35 +225,32 @@ class _SignUpPageState extends State<SignUpPage> {
     if (_formKey.currentState.validate()) {
       try {
         SystemChannels.textInput.invokeMethod('TextInput.hide');
-        // await _changeLoadingVisible();
-        await verifyPhone(authRepository, phoneNumber);
-        var firebaseUser = authRepository.appUser.firebaseUser;
-        print(firebaseUser.uid);
-                      /* new User(
-                        firebaseUserId: firebaseUser.uid,
-                        firstName:
-                      ); */
-        //need await so it has chance to go through error if found.
-        /* await Auth.signUp(email, password).then((uID) {
-          Auth.addUserSettingsDB(new User(
-            userId: uID,
-            email: email,
+        await _changeLoadingVisible();
+
+        bool result = false;
+
+        if (await authRepository.getCurrentUser() == null) {
+          result = await authRepository.signInWithGoogle();
+        } else {
+          result = true;
+        }
+
+        if (result == true) {
+          print("signed in successfully");
+          User newUser = new User(
+            id: authRepository.appUser.firebaseUser.uid,
             firstName: firstName,
             lastName: lastName,
-          ));
-        }); */
-        //now automatically login user too
-        //await StateWidget.of(context).logInUser(email, password);
-        // await Navigator.pushNamed(context, '/login');
+            email: authRepository.appUser.firebaseUser.email,
+            birthDate: birthDate,
+            gender: gender,
+            phoneNumber: phoneNumber,
+          );
+          UserRepository.addUser(newUser);
+        }
       } catch (e) {
         _changeLoadingVisible();
         print("Sign Up Error: $e");
-        /* String exception = Auth.getExceptionText(e);
-        Flushbar(
-          title: "Sign Up Error",
-          message: exception,
-          duration: Duration(seconds: 5),
-        )..show(context); */
       }
     } else {
       setState(() => _autoValidate = true);

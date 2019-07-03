@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
     switch (userRepo.status) {
       case Status.Uninitialized:
       case Status.Unauthenticated:
+      case Status.NoUser:
         return SignUpPage();
       case Status.Authenticated:
         return App();
