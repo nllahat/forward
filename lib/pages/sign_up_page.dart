@@ -20,7 +20,6 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _firstName = new TextEditingController();
   final TextEditingController _lastName = new TextEditingController();
   final TextEditingController _email = new TextEditingController();
-  final TextEditingController _phone = new TextEditingController();
 
   bool _autoValidate = false;
   bool _loadingVisible = false;
@@ -107,25 +106,6 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
 
-    final phoneNumber = TextFormField(
-      keyboardType: TextInputType.phone,
-      autofocus: false,
-      controller: _phone,
-      validator: Validator.validatePhoneNumber,
-      decoration: InputDecoration(
-        prefixIcon: Padding(
-          padding: EdgeInsets.only(left: 5.0),
-          child: Icon(
-            Icons.phone,
-            color: Colors.grey,
-          ), // icon is 48px widget.
-        ), // icon is 48px widget.
-        hintText: 'Phone Number',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-      ),
-    );
-
     final birthDate =
         AppFromDatePicker(onDateChange: (DateTime selectedBirthDate) {
       _signUpBirthDate = selectedBirthDate;
@@ -148,7 +128,7 @@ class _SignUpPageState extends State<SignUpPage> {
               firstName: _firstName.text,
               lastName: _lastName.text,
               // email: _email.text,
-              phoneNumber: _phone.text,
+              email: _email.text,
               birthDate: _signUpBirthDate,
               gender: _genderGroup[_selectedGenderIndex].value,
               context: context);
@@ -157,16 +137,6 @@ class _SignUpPageState extends State<SignUpPage> {
         color: Theme.of(context).primaryColor,
         child: Text('SIGN UP', style: TextStyle(color: Colors.white)),
       ),
-    );
-
-    final signInLabel = FlatButton(
-      child: Text(
-        'Have an Account? Sign In.',
-        style: TextStyle(color: Colors.black54),
-      ),
-      onPressed: () {
-        Navigator.pushNamed(context, '/login');
-      },
     );
 
     return Scaffold(
@@ -189,14 +159,13 @@ class _SignUpPageState extends State<SignUpPage> {
                       SizedBox(height: 24.0),
                       lastName,
                       SizedBox(height: 24.0),
-                      phoneNumber,
+                      email,
                       SizedBox(height: 24.0),
                       birthDate,
                       SizedBox(height: 24.0),
                       gender,
                       SizedBox(height: 12.0),
                       signUpButton,
-                      signInLabel
                     ],
                   ),
                 ),
@@ -207,16 +176,10 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Future<void> _changeLoadingVisible() async {
-    setState(() {
-      _loadingVisible = !_loadingVisible;
-    });
-  }
-
   void _signUp(
       {String firstName,
       String lastName,
-      String phoneNumber,
+      String email,
       DateTime birthDate,
       Gender gender,
       BuildContext context}) async {
@@ -224,33 +187,20 @@ class _SignUpPageState extends State<SignUpPage> {
 
     if (_formKey.currentState.validate()) {
       try {
-        SystemChannels.textInput.invokeMethod('TextInput.hide');
-        await _changeLoadingVisible();
-
-        bool result = false;
-
-        if (await authRepository.getCurrentUser() == null) {
-          result = await authRepository.signInWithGoogle();
-        } else {
-          result = true;
-        }
-
-        if (result == true) {
-          print("signed in successfully");
-          User newUser = new User(
-            id: authRepository.appUser.firebaseUser.uid,
-            firstName: firstName,
-            lastName: lastName,
-            email: authRepository.appUser.firebaseUser.email,
-            birthDate: birthDate,
-            gender: gender,
-            phoneNumber: phoneNumber,
-          );
-          UserRepository.addUser(newUser);
-        }
+        User newUser = new User(
+          id: authRepository.appUser.firebaseUser.uid,
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          birthDate: birthDate,
+          gender: gender,
+          phoneNumber: authRepository.appUser.firebaseUser.phoneNumber,
+        );
+        await UserRepository.addUser(newUser);
+        authRepository.checkAuthStatus();
       } catch (e) {
-        _changeLoadingVisible();
         print("Sign Up Error: $e");
+        throw e;
       }
     } else {
       setState(() => _autoValidate = true);

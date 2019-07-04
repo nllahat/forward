@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forward/pages/login_page.dart';
 import 'package:forward/pages/sign_up_page.dart';
 import 'package:forward/repositories/auth_repository.dart';
 import 'package:forward/app.dart';
@@ -12,12 +13,13 @@ class MyApp extends StatelessWidget {
     switch (userRepo.status) {
       case Status.Uninitialized:
       case Status.Unauthenticated:
+        return LoginPage();
       case Status.NoUser:
         return SignUpPage();
       case Status.Authenticated:
         return App();
       default:
-        return SignUpPage();
+        return LoginPage();
     }
   }
 

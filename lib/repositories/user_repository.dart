@@ -4,7 +4,7 @@ import 'package:forward/models/user_model.dart';
 class UserRepository {
   static final Firestore _db = Firestore.instance;
 
-  Stream<List<User>> streamUsers() {
+  static Stream<List<User>> streamUsers() {
     var ref = _db.collection('users');
 
     return ref.snapshots().map((list) =>
@@ -23,6 +23,10 @@ class UserRepository {
   /// Get a single document
   static Future<User> getUser(String id) async {
     DocumentSnapshot doc = await _db.collection('users').document(id).get();
+
+    if (doc.exists == false) {
+      return null;
+    }
 
     return User.fromFirestore(doc);
   }
@@ -56,15 +60,13 @@ class UserRepository {
     }
   }
 
-  static void addUser(User user) {
-    checkUserExist(user.id).then((value) {
-      if (!value) {
-        Firestore.instance
-            .document("users/${user.id}")
-            .setData(user.toJson());
-      } else {
-        print("user ${user.firstName} ${user.email} exists");
-      }
-    });
+  static Future<void> addUser(User user) async {
+    bool isUserExists = await checkUserExist(user.id);
+
+    if (!isUserExists) {
+      Firestore.instance.document("users/${user.id}").setData(user.toJson());
+    } else {
+      print("user ${user.firstName} ${user.email} exists");
+    }
   }
 }

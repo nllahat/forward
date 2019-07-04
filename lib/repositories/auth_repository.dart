@@ -1,9 +1,16 @@
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:forward/models/user_model.dart';
+import 'package:forward/repositories/user_repository.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated, NoUser }
+enum Status {
+  Uninitialized,
+  Authenticated,
+  Authenticating,
+  Unauthenticated,
+  NoUser
+}
 
 class AppUser {
   FirebaseUser firebaseUser;
@@ -120,22 +127,26 @@ class AuthRepository with ChangeNotifier {
     return FirebaseAuth.instance.currentUser();
   }
 
+  void checkAuthStatus() {
+    this._onAuthStateChanged(_user);
+  }
 
   Future<void> _onAuthStateChanged(FirebaseUser firebaseUser) async {
     if (firebaseUser == null) {
       _status = Status.Unauthenticated;
       errorMessage = '';
     } else {
-      _status = Status.Authenticated;
       _user = firebaseUser;
       appUser.firebaseUser = _user;
-      /* appUser.user = await _userRepository.getUserByPhoneNumber(_user.phoneNumber);
+      appUser.user = await UserRepository.getUser(appUser.firebaseUser.uid);
       errorMessage = '';
 
       if (appUser.user == null) {
         _status = Status.NoUser;
         errorMessage = 'No user was found';
-      } */
+      } else {
+        _status = Status.Authenticated;
+      }
     }
     notifyListeners();
   }
