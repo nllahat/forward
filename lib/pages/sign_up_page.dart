@@ -117,6 +117,17 @@ class _SignUpPageState extends State<SignUpPage> {
           _selectedGenderIndex = value;
         });
 
+    final signInLabel = FlatButton(
+      child: Text(
+        'Back to login',
+        style: TextStyle(color: Colors.black54),
+      ),
+      onPressed: () {
+        final authRepository = Provider.of<AuthRepository>(context);
+        authRepository.signOut();
+      },
+    );
+
     final signUpButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
@@ -166,6 +177,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       gender,
                       SizedBox(height: 12.0),
                       signUpButton,
+                      signInLabel
                     ],
                   ),
                 ),

@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
             '/': (context) =>
                 _getPageByAuthState(Provider.of<AuthRepository>(context)),
           },
-          onGenerateRoute: Router.generateRoute,
+          onGenerateRoute: Router.generateRouteLogister,
           onUnknownRoute: (settings) => MaterialPageRoute(
                 builder: (_) => Scaffold(
                       body: Center(

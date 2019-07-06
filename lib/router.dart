@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:forward/pages/login_page.dart';
 import 'package:forward/pages/sign_up_page.dart';
 import 'package:forward/pages/sms_code_page.dart';
+import 'package:forward/pages/splash_page.dart';
 import 'package:provider/provider.dart';
 
 class Router {
-  static Route<dynamic> generateRoute(RouteSettings settings) {
+  static Route<dynamic> generateRouteLogister(RouteSettings settings) {
     switch (settings.name) {
       case '/login':
         return MaterialPageRoute(builder: (_) => LoginPage());
@@ -20,6 +21,23 @@ class Router {
         );
       case '/signup':
         return MaterialPageRoute(builder: (_) => SignUpPage());
+      default:
+        return MaterialPageRoute(builder: (_) {
+          return Scaffold(
+            body: Center(
+              child: Text('No route defined for ${settings.name}'),
+            ),
+          );
+        });
+    }
+  }
+
+  static Route<dynamic> generateRouteFeed(RouteSettings settings) {
+    switch (settings.name) {
+      case '/':
+        return MaterialPageRoute(builder: (_) => SplashPage());
+      case '/activity':
+        return MaterialPageRoute(builder: (_) => SplashPage());
       default:
         return MaterialPageRoute(builder: (_) {
           return Scaffold(

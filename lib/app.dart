@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:forward/repositories/auth_repository.dart';
 import 'package:forward/widgets/bottom_navigation.dart';
-import 'package:forward/widgets/tab_navigator.dart';
+import 'package:forward/widgets/tab_navigator_feed.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatefulWidget {
@@ -30,27 +30,27 @@ class AppState extends State<App> {
           !await navigatorKeys[currentTab].currentState.maybePop(),
       child: Scaffold(
         appBar: new AppBar(
-        // Title
-        title: new Text("Forward"),
-        actions: <Widget>[
-          // action button
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              alignment: Alignment.center,
-              child: GestureDetector(
-                  onTap: () {
-                    Provider.of<AuthRepository>(context).signOut();
-                  },
-                  child: Text('Log Out',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16))),
+          // Title
+          title: new Text("Forward"),
+          actions: <Widget>[
+            // action button
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                alignment: Alignment.center,
+                child: GestureDetector(
+                    onTap: () {
+                      Provider.of<AuthRepository>(context).signOut();
+                    },
+                    child: Text('Log Out',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16))),
+              ),
             ),
-          ),
-        ],
-        // Set the background color of the App Bar
-        // backgroundColor: Colors.blue,
-      ),
+          ],
+          // Set the background color of the App Bar
+          // backgroundColor: Colors.blue,
+        ),
         body: Stack(children: <Widget>[
           _buildOffstageNavigator(TabItem.feed),
           _buildOffstageNavigator(TabItem.myArea),
@@ -65,12 +65,23 @@ class AppState extends State<App> {
   }
 
   Widget _buildOffstageNavigator(TabItem tabItem) {
-    return Offstage(
-      offstage: currentTab != tabItem,
-      child: TabNavigator(
-        navigatorKey: navigatorKeys[tabItem],
-        tabItem: tabItem,
-      ),
-    );
+    switch (tabItem) {
+      case TabItem.feed:
+        return Offstage(
+          offstage: currentTab != tabItem,
+          child: TabNavigatorFeed(
+            navigatorKey: navigatorKeys[tabItem],
+            tabItem: tabItem,
+          ),
+        );
+        break;
+      default:
+        return Offstage(
+            offstage: currentTab != tabItem,
+            child: TabNavigatorFeed(
+              navigatorKey: navigatorKeys[tabItem],
+              tabItem: tabItem,
+            ));
+    }
   }
 }
