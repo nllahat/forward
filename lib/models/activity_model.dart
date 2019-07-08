@@ -41,6 +41,7 @@ class Activity {
     Map data = doc.data;
     List<DocumentReference> coordinatoresDocRef =
         new List<DocumentReference>.from(data['coordinators']);
+    DocumentReference organisationRef = data['organisation'];
     Timestamp startDate = data['startDate'];
     Timestamp endDate = data['endDate'];
 
@@ -55,6 +56,6 @@ class Activity {
         coordinators:
             coordinatoresDocRef.map((elem) => elem.documentID).toList(),
         image: data['image'],
-        organisation: data['organisation']);
+        organisation: organisationRef.documentID);
   }
 }
