@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:forward/repositories/auth_repository.dart';
-import 'package:forward/utils/validator.dart';
+import 'package:forward/utils/validator_util.dart';
 import 'package:forward/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
       keyboardType: TextInputType.phone,
       autofocus: false,
       controller: _phone,
-      validator: Validator.validatePhoneNumber,
+      validator: ValidatorUtil.validatePhoneNumber,
       decoration: InputDecoration(
         prefixIcon: Padding(
           padding: EdgeInsets.only(left: 5.0),

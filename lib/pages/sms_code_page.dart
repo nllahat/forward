@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:forward/pages/login_page.dart';
 import 'package:forward/repositories/auth_repository.dart';
-import 'package:forward/utils/validator.dart';
+import 'package:forward/utils/validator_util.dart';
 import 'package:forward/widgets/loading.dart';
 import 'package:provider/provider.dart';
 

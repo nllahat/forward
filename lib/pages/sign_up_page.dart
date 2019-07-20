@@ -4,7 +4,7 @@ import 'package:forward/models/user_model.dart';
 import 'package:forward/repositories/auth_repository.dart';
 import 'package:forward/repositories/user_repository.dart';
 
-import 'package:forward/utils/validator.dart';
+import 'package:forward/utils/validator_util.dart';
 import 'package:forward/widgets/app_form_date_picker.dart';
 import 'package:forward/widgets/app_form_radio_buttons.dart';
 import 'package:forward/widgets/loading.dart';
@@ -52,7 +52,7 @@ class _SignUpPageState extends State<SignUpPage> {
       autofocus: false,
       textCapitalization: TextCapitalization.words,
       controller: _firstName,
-      validator: Validator.validateName,
+      validator: ValidatorUtil.validateName,
       decoration: InputDecoration(
         prefixIcon: Padding(
           padding: EdgeInsets.only(left: 5.0),
@@ -71,7 +71,7 @@ class _SignUpPageState extends State<SignUpPage> {
       autofocus: false,
       textCapitalization: TextCapitalization.words,
       controller: _lastName,
-      validator: Validator.validateName,
+      validator: ValidatorUtil.validateName,
       decoration: InputDecoration(
         prefixIcon: Padding(
           padding: EdgeInsets.only(left: 5.0),
@@ -90,7 +90,7 @@ class _SignUpPageState extends State<SignUpPage> {
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       controller: _email,
-      validator: Validator.validateEmail,
+      validator: ValidatorUtil.validateEmail,
       decoration: InputDecoration(
         prefixIcon: Padding(
           padding: EdgeInsets.only(left: 5.0),
