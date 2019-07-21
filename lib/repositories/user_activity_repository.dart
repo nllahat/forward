@@ -11,6 +11,30 @@ class UserActivityRepository {
         list.documents.map((doc) => UserActivity.fromFirestore(doc)).toList());
   }
 
+  static Stream<Map<String, UserActivity>> streamUserUserActivitesMap(
+      String userId) {
+    Stream<Map<String, UserActivity>> usersActivitiesStream;
+    Map<String, UserActivity> map = new Map();
+    DocumentReference userDocRef = _db.collection('users').document(userId);
+
+    usersActivitiesStream = _db
+        .collection('users_activities')
+        .where('user', isEqualTo: userDocRef)
+        .orderBy('timestamp')
+        .snapshots()
+        .map((list) {
+      list.documents.forEach((doc) {
+        var userActivity = UserActivity.fromFirestore(doc);
+
+        map[userActivity.activityId] = userActivity;
+      });
+
+      return map;
+    });
+
+    return usersActivitiesStream;
+  }
+
   static Stream<List<UserActivity>> streamUsersActivitiesByUserId(
       String userId) {
     var userDocRef = _db.collection('users').document(userId);
