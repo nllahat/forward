@@ -43,26 +43,42 @@ class Registration extends StatelessWidget {
     return StreamProvider<Map<String, UserActivity>>.value(
         value: UserActivityRepository.streamUserUserActivitesMap(userId),
         child: Consumer<Map<String, UserActivity>>(
-            builder: (context, userActivities, child) => userActivities == null ? CircularProgressIndicator() : Center(
-                  child: Column(
-                    children: <Widget>[
-                      Text('Privacy issues'),
-                      Text('We will show the details after your confirmation'),
-                      RaisedButton(
-                        onPressed: () async {
-                          UserActivity userActivity = UserActivity(
-                              userId: userId, activityId: activityId);
+            builder: (context, userActivities, child) => userActivities == null
+                ? CircularProgressIndicator()
+                : Center(
+                    child: Column(
+                      children: <Widget>[
+                        Text('Privacy issues'),
+                        Text(
+                            'We will show the details after your confirmation'),
+                        userActivities.containsKey(activityId)
+                            ? RaisedButton(
+                                onPressed: () async {
+                                  await UserActivityRepository
+                                      .deleteUserActivity(
+                                          userActivities[activityId]);
 
-                          await UserActivityRepository.addUserActivity(
-                              userActivity);
+                                  this._showDialog(context);
+                                },
+                                child: Text('Cancel',
+                                    style: TextStyle(fontSize: 20)),
+                              )
+                            : RaisedButton(
+                                onPressed: () async {
+                                  UserActivity userActivity = UserActivity(
+                                      userId: userId, activityId: activityId);
 
-                          this._showDialog(context);
-                        },
-                        child: userActivities.containsKey(activityId) ? Container() : Text('Register', style: TextStyle(fontSize: 20)),
-                      )
-                    ],
-                  ),
-                )));
+                                  await UserActivityRepository.addUserActivity(
+                                      userActivity);
+
+                                  this._showDialog(context);
+                                },
+                                child: Text('Register',
+                                    style: TextStyle(fontSize: 20)),
+                              )
+                      ],
+                    ),
+                  )));
   }
 
   void _showDialog(BuildContext context) {

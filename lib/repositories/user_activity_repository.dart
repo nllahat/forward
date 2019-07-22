@@ -72,4 +72,8 @@ class UserActivityRepository {
       throw onError;
     });
   }
+
+  static Future<void> deleteUserActivity(UserActivity userActivity) {
+    return _db.collection("users_activities").document(userActivity.id).delete();
+  }
 }
