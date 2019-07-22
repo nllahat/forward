@@ -37,29 +37,32 @@ class _ActivityPageState extends State<ActivityPage> {
 class Registration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          Text('Privacy issues'),
-          Text('We will show the details after your confirmation'),
-          RaisedButton(
-            onPressed: () async {
-              String userId =
-                  Provider.of<AuthRepository>(context).appUser.user.id;
-              String activityId = Provider.of<Activity>(context).id;
+    String userId = Provider.of<AuthRepository>(context).appUser.user.id;
+    String activityId = Provider.of<Activity>(context).id;
 
-              UserActivity userActivity =
-                  UserActivity(userId: userId, activityId: activityId);
+    return StreamProvider<Map<String, UserActivity>>.value(
+        value: UserActivityRepository.streamUserUserActivitesMap(userId),
+        child: Consumer<Map<String, UserActivity>>(
+            builder: (context, userActivities, child) => userActivities == null ? CircularProgressIndicator() : Center(
+                  child: Column(
+                    children: <Widget>[
+                      Text('Privacy issues'),
+                      Text('We will show the details after your confirmation'),
+                      RaisedButton(
+                        onPressed: () async {
+                          UserActivity userActivity = UserActivity(
+                              userId: userId, activityId: activityId);
 
-              await UserActivityRepository.addUserActivity(userActivity);
+                          await UserActivityRepository.addUserActivity(
+                              userActivity);
 
-              this._showDialog(context);
-            },
-            child: Text('Register', style: TextStyle(fontSize: 20)),
-          )
-        ],
-      ),
-    );
+                          this._showDialog(context);
+                        },
+                        child: userActivities.containsKey(activityId) ? Container() : Text('Register', style: TextStyle(fontSize: 20)),
+                      )
+                    ],
+                  ),
+                )));
   }
 
   void _showDialog(BuildContext context) {

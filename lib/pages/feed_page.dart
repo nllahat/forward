@@ -34,7 +34,7 @@ class _FeedPageState extends State<FeedPage> {
               builder: (context, userActivities, child) => ListView(
                 padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
                 children: activities.map<Widget>((Activity activity) {
-                  bool isUserInActivity = userActivities.containsKey(activity.id);
+                  bool isUserInActivity = userActivities != null ? userActivities.containsKey(activity.id) : false;
                   return Container(
                     margin: const EdgeInsets.only(bottom: 8.0),
                     child: StreamProvider<Organisation>.value(
