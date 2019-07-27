@@ -32,7 +32,7 @@ class TabHelper {
   static IconData icon(TabItem tabItem) {
     switch (tabItem) {
       case TabItem.feed:
-        return Icons.view_headline;
+        return Icons.format_list_bulleted;
       case TabItem.myArea:
         return Icons.table_chart;
       case TabItem.profile:
@@ -42,17 +42,17 @@ class TabHelper {
     }
   }
 
-  /* static MaterialColor color(TabItem tabItem) {
+  static MaterialColor color(TabItem tabItem) {
     switch (tabItem) {
-      case TabItem.red:
-        return Colors.red;
-      case TabItem.green:
-        return Colors.green;
-      case TabItem.blue:
-        return Colors.blue;
+      case TabItem.feed:
+        return Colors.pink;
+      case TabItem.myArea:
+        return Colors.pink;
+      case TabItem.profile:
+        return Colors.pink;
     }
     return Colors.grey;
-  } */
+  }
 }
 
 class BottomNavigation extends StatelessWidget {
@@ -70,14 +70,14 @@ class BottomNavigation extends StatelessWidget {
         _buildItem(tabItem: TabItem.profile),
       ],
       onTap: (index) => onSelectTab(
-            TabHelper.item(index: index),
-          ),
+        TabHelper.item(index: index),
+      ),
     );
   }
 
-  /* Color _colorTabMatching({TabItem item}) {
+  Color _colorTabMatching({TabItem item}) {
     return currentTab == item ? TabHelper.color(item) : Colors.grey;
-  } */
+  }
 
   BottomNavigationBarItem _buildItem({TabItem tabItem}) {
     String text = TabHelper.description(tabItem);
@@ -86,7 +86,7 @@ class BottomNavigation extends StatelessWidget {
     return BottomNavigationBarItem(
       icon: Icon(
         icon,
-        // color: _colorTabMatching(item: tabItem),
+        color: _colorTabMatching(item: tabItem),
       ),
       title: Text(
         text,

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:forward/models/activity_model.dart';
 import 'package:forward/models/organisation_model.dart';
@@ -8,16 +7,17 @@ import 'package:forward/repositories/organisation_repository.dart';
 import 'package:forward/repositories/user_activity_repository.dart';
 import 'package:forward/utils/location_util.dart';
 import 'package:forward/widgets/activity_card.dart';
+import 'package:forward/widgets/activity_minimal_card.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoder/model.dart';
 import 'package:provider/provider.dart';
 
-class FeedPage extends StatefulWidget {
+class MyAreaPage extends StatefulWidget {
   @override
-  _FeedPageState createState() => _FeedPageState();
+  _MyAreaPageState createState() => _MyAreaPageState();
 }
 
-class _FeedPageState extends State<FeedPage> {
+class _MyAreaPageState extends State<MyAreaPage> {
   @override
   Widget build(BuildContext context) {
     List<Activity> activities = Provider.of<List<Activity>>(context);
@@ -29,7 +29,7 @@ class _FeedPageState extends State<FeedPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${activities.length} activities are available'),
+        title: Text('My Area'),
       ),
       body: Scrollbar(
           child: StreamProvider<Map<String, UserActivity>>.value(
@@ -53,28 +53,14 @@ class _FeedPageState extends State<FeedPage> {
                               return Container();
                             }
 
-                            return Column(
-                              children: <Widget>[
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(value?.name,
-                                        style: TextStyle(fontSize: 20.0)),
-                                    isUserInActivity
-                                        ? Text("I'm registered!!!!!!!")
-                                        : Container()
-                                  ],
-                                ),
-                                FutureProvider<Address>.value(
+                            return FutureProvider<Address>.value(
                                   value: LocationUtil.getAddressByGeoPoint(
                                       activity.location),
                                   catchError: (context, object) {
                                     return Address();
                                   },
-                                  child: ActivityCard(activity: activity),
-                                )
-                              ],
-                            );
+                                  child: ActivityMinimalCard(activity: activity),
+                                );
                           },
                         ),
                       ),

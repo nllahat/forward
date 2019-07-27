@@ -13,7 +13,8 @@ class UserActivity {
     activityId,
     isCancelled: false,
     timestamp,
-  })  : this.userId = userId,
+  })  : this.id = id,
+        this.userId = userId,
         this.activityId = activityId,
         this.isCancelled = isCancelled ?? false,
         this.timestamp = timestamp ?? DateTime.now();

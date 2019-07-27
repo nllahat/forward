@@ -34,7 +34,17 @@ class _ActivityPageState extends State<ActivityPage> {
   }
 }
 
-class Registration extends StatelessWidget {
+class Registration extends StatefulWidget {
+  @override
+  _RegistrationState createState() => _RegistrationState();
+}
+
+class _RegistrationState extends State<Registration> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     String userId = Provider.of<AuthRepository>(context).appUser.user.id;
@@ -51,14 +61,17 @@ class Registration extends StatelessWidget {
                         Text('Privacy issues'),
                         Text(
                             'We will show the details after your confirmation'),
-                        userActivities.containsKey(activityId)
+                        userActivities[activityId] != null &&
+                                userActivities[activityId].isCancelled == false
                             ? RaisedButton(
                                 onPressed: () async {
                                   await UserActivityRepository
                                       .deleteUserActivity(
                                           userActivities[activityId]);
 
-                                  this._showDialog(context);
+                                  this._showDialog(context).then((val) {
+                                      this.setState(() {});
+                                  });
                                 },
                                 child: Text('Cancel',
                                     style: TextStyle(fontSize: 20)),
@@ -71,7 +84,9 @@ class Registration extends StatelessWidget {
                                   await UserActivityRepository.addUserActivity(
                                       userActivity);
 
-                                  this._showDialog(context);
+                                  this._showDialog(context).then((val) {
+                                      this.setState(() {});
+                                  });
                                 },
                                 child: Text('Register',
                                     style: TextStyle(fontSize: 20)),
@@ -81,9 +96,9 @@ class Registration extends StatelessWidget {
                   )));
   }
 
-  void _showDialog(BuildContext context) {
+  Future<void> _showDialog(BuildContext context) {
     // flutter defined function
-    showDialog(
+    return showDialog(
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog

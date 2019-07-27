@@ -20,6 +20,7 @@ class UserActivityRepository {
     usersActivitiesStream = _db
         .collection('users_activities')
         .where('user', isEqualTo: userDocRef)
+        .where('isCancelled', isEqualTo: false)
         .orderBy('timestamp')
         .snapshots()
         .map((list) {
@@ -73,7 +74,10 @@ class UserActivityRepository {
     });
   }
 
-  static Future<void> deleteUserActivity(UserActivity userActivity) {
-    return _db.collection("users_activities").document(userActivity.id).delete();
+  static Future<void> deleteUserActivity(UserActivity userActivity) async {
+    var docRef = _db.collection("users_activities").document(userActivity.id);
+
+    await docRef.updateData({"isCancelled": true});
+    userActivity.isCancelled = true;
   }
 }

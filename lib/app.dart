@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:forward/repositories/auth_repository.dart';
 import 'package:forward/widgets/bottom_navigation.dart';
+import 'package:forward/widgets/tab_navigator_area.dart';
 import 'package:forward/widgets/tab_navigator_feed.dart';
 import 'package:provider/provider.dart';
 
@@ -29,9 +30,7 @@ class AppState extends State<App> {
       onWillPop: () async =>
           !await navigatorKeys[currentTab].currentState.maybePop(),
       child: Scaffold(
-        appBar: new AppBar(
-          // Title
-          title: new Text("Forward"),
+        /*appBar: new AppBar(
           actions: <Widget>[
             // action button
             Padding(
@@ -50,7 +49,7 @@ class AppState extends State<App> {
           ],
           // Set the background color of the App Bar
           // backgroundColor: Colors.blue,
-        ),
+        ),*/
         body: Stack(children: <Widget>[
           _buildOffstageNavigator(TabItem.feed),
           _buildOffstageNavigator(TabItem.myArea),
@@ -70,6 +69,15 @@ class AppState extends State<App> {
         return Offstage(
           offstage: currentTab != tabItem,
           child: TabNavigatorFeed(
+            navigatorKey: navigatorKeys[tabItem],
+            tabItem: tabItem,
+          ),
+        );
+        break;
+      case TabItem.myArea:
+        return Offstage(
+          offstage: currentTab != tabItem,
+          child: TabNavigatorMyArea(
             navigatorKey: navigatorKeys[tabItem],
             tabItem: tabItem,
           ),
