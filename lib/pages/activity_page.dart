@@ -51,7 +51,7 @@ class _RegistrationState extends State<Registration> {
     String activityId = Provider.of<Activity>(context).id;
 
     return StreamProvider<Map<String, UserActivity>>.value(
-        value: UserActivityRepository.streamUserUserActivitesMap(userId),
+        value: UserActivityRepository.streamUserActivitesMap(userId),
         child: Consumer<Map<String, UserActivity>>(
             builder: (context, userActivities, child) => userActivities == null
                 ? CircularProgressIndicator()

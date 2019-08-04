@@ -27,7 +27,18 @@ class ActivityMinimalCard extends StatelessWidget {
               child: Center(
                 child: Icon(Icons.av_timer, color: Colors.white,),
               ),
-            )
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ActivityCardText(),
+                ),
+                ActivityCardInfoSmall(),
+              ],
+            ),
           ],
         ));
 

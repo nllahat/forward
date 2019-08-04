@@ -30,10 +30,25 @@ class _FeedPageState extends State<FeedPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('${activities.length} activities are available'),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              alignment: Alignment.center,
+              child: GestureDetector(
+                  onTap: () {
+                    Provider.of<AuthRepository>(context).signOut();
+                  },
+                  child: Text('Log Out',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16))),
+            ),
+          ),
+        ],
       ),
       body: Scrollbar(
           child: StreamProvider<Map<String, UserActivity>>.value(
-              value: UserActivityRepository.streamUserUserActivitesMap(userId),
+              value: UserActivityRepository.streamUserActivitesMap(userId),
               child: Consumer<Map<String, UserActivity>>(
                 builder: (context, userActivities, child) => ListView(
                   padding:
@@ -60,9 +75,6 @@ class _FeedPageState extends State<FeedPage> {
                                   children: <Widget>[
                                     Text(value?.name,
                                         style: TextStyle(fontSize: 20.0)),
-                                    isUserInActivity
-                                        ? Text("I'm registered!!!!!!!")
-                                        : Container()
                                   ],
                                 ),
                                 FutureProvider<Address>.value(
@@ -71,7 +83,7 @@ class _FeedPageState extends State<FeedPage> {
                                   catchError: (context, object) {
                                     return Address();
                                   },
-                                  child: ActivityCard(activity: activity),
+                                  child: ActivityCard(activity: activity, isUserInActivity: isUserInActivity),
                                 )
                               ],
                             );

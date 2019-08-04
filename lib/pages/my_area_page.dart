@@ -33,7 +33,7 @@ class _MyAreaPageState extends State<MyAreaPage> {
       ),
       body: Scrollbar(
           child: StreamProvider<Map<String, UserActivity>>.value(
-              value: UserActivityRepository.streamUserUserActivitesMap(userId),
+              value: UserActivityRepository.streamUserActivitesMap(userId),
               child: Consumer<Map<String, UserActivity>>(
                 builder: (context, userActivities, child) => ListView(
                   padding:
@@ -42,7 +42,7 @@ class _MyAreaPageState extends State<MyAreaPage> {
                     bool isUserInActivity = userActivities != null
                         ? userActivities.containsKey(activity.id)
                         : false;
-                    return Container(
+                    return !isUserInActivity ? Container() : Container(
                       margin: const EdgeInsets.only(bottom: 8.0),
                       child: StreamProvider<Organisation>.value(
                         value: OrganisationRepository.streamOrganisation(

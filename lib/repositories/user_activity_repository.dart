@@ -11,7 +11,7 @@ class UserActivityRepository {
         list.documents.map((doc) => UserActivity.fromFirestore(doc)).toList());
   }
 
-  static Stream<Map<String, UserActivity>> streamUserUserActivitesMap(
+  static Stream<Map<String, UserActivity>> streamUserActivitesMap(
       String userId) {
     Stream<Map<String, UserActivity>> usersActivitiesStream;
     Map<String, UserActivity> map = new Map();
