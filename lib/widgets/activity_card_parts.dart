@@ -5,6 +5,7 @@ import 'package:forward/models/activity_model.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:forward/utils/colors_util.dart';
 
 class ActivityCardImage extends StatelessWidget {
   @override
@@ -13,10 +14,12 @@ class ActivityCardImage extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         image: DecorationImage(
             image: NetworkImage(activity.image), fit: BoxFit.cover),
       ),
-      height: 180.0,
+      height: 260.0,
     );
   }
 }
@@ -30,20 +33,23 @@ class ActivityCardTop extends StatelessWidget {
       children: <Widget>[
         ActivityCardImage(),
         Positioned(bottom: 10, child: ActivityCardText()),
-        isUserInActivity == null || isUserInActivity == false ? Container() : Positioned(
-            top: 0,
-            right: 0,
-            child: Transform.rotate(
-              angle: pi / 2,
-              child: Chip(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(20),bottomRight: Radius.circular(20))),
-                label: Transform.rotate(
-                    angle: pi * 2 + 300,
-                    child: Icon(Icons.check)
-                    ),
-                backgroundColor: Colors.pink,
-              ),
-            )),
+        isUserInActivity == null || isUserInActivity == false
+            ? Container()
+            : Positioned(
+                top: 0,
+                right: 20,
+                child: Transform.rotate(
+                  angle: pi / 2,
+                  child: Chip(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(20),
+                            bottomRight: Radius.circular(20))),
+                    label: Transform.rotate(
+                        angle: pi * 2 + 300, child: Icon(Icons.check)),
+                    backgroundColor: Colors.pink,
+                  ),
+                )),
       ],
     );
   }
@@ -64,16 +70,24 @@ class ActivityCardText extends StatelessWidget {
           Text(
             activity.name,
             style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 24.0, color: Colors.black),
-          ),
-          Text(
-            'More details',
-            style: TextStyle(
-                decoration: TextDecoration.underline,
-                fontWeight: FontWeight.normal,
-                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                fontSize: 24.0,
                 color: Colors.black),
-          )
+          ),
+          FutureProvider<Color>.value(
+              value: ColorsUtil().getTextColor(activity.image),
+              catchError: (context, object) {
+                return Colors.white;
+              },
+              child: Consumer<Color>(
+                  builder: (context, textColor, child) => Text(
+                        'More details',
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16.0,
+                            color: textColor ),
+                      )))
         ],
       ),
     );
@@ -84,17 +98,25 @@ class ActivityCardInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.only(top: 25.0, bottom: 25.0),
+      margin: const EdgeInsets.only(right: 5.0, left: 5.0),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           ActivityCardDetailsDay(),
+          VerticalDivider(
+            color: Colors.pink,
+            width: 1.0,
+          ),
           ActivityCardDetailsTime(),
+          VerticalDivider(
+            color: Colors.pink,
+            width: 1.0,
+          ),
           ActivityCardDetailsLocation(),
         ],
       ),
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
     );
   }
 }
@@ -124,10 +146,8 @@ class ActivityCardDetailsDay extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Icon(Icons.info),
-        ),
+        Container(
+            margin: const EdgeInsets.only(right: 5.0), child: Icon(Icons.info)),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -153,12 +173,10 @@ class ActivityCardDetailsTime extends StatelessWidget {
     Activity activity = Provider.of<Activity>(context);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(14.0),
-          child: Icon(Icons.access_time),
-        ),
+        Container(
+            margin: const EdgeInsets.only(right: 5.0),
+            child: Icon(Icons.access_time)),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -184,30 +202,25 @@ class ActivityCardDetailsLocation extends StatelessWidget {
     Address address = Provider.of<Address>(context);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(14.0),
-          child: Icon(Icons.location_on),
-        ),
+        Container(
+            margin: const EdgeInsets.only(right: 5.0),
+            child: Icon(Icons.location_on)),
         Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Text(
               address == null || address.thoroughfare == null
                   ? 'Unknow'
                   : address.thoroughfare,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0),
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
               address == null || address.adminArea == null
                   ? 'Unknow'
                   : address.adminArea,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 10.0),
+              style: TextStyle(fontWeight: FontWeight.normal),
             ),
           ],
         ),

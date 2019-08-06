@@ -18,6 +18,9 @@ class ActivityCard extends StatelessWidget {
     } */
 
     Card _card = Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
         color: Colors.white70,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -26,13 +29,13 @@ class ActivityCard extends StatelessWidget {
         ));
 
     return Container(
-        /* decoration: BoxDecoration(
-          boxShadow: [new BoxShadow(
+        decoration: BoxDecoration(boxShadow: [
+          new BoxShadow(
             offset: Offset(0, 7),
-            color: Colors.grey,
+            color: Colors.grey.shade400,
             blurRadius: 30.0,
-          ),]
-        ), */
+          ),
+        ], borderRadius: BorderRadius.all(Radius.circular(20))),
         child: InkWell(
             onTap: () {
               Navigator.pushNamed(context, '/activity', arguments: activity);

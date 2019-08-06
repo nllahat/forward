@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:forward/models/activity_model.dart';
 import 'package:forward/models/user_activity_model.dart';
@@ -18,18 +16,26 @@ class ActivityPage extends StatefulWidget {
 class _ActivityPageState extends State<ActivityPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ActivityCardImage(),
-              ActivityCardInfo(),
-              Registration()
-            ],
-          )),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        ActivityPageTop(),
+        ActivityCardInfo(),
+        Registration()
+      ],
+    );
+  }
+}
+
+class ActivityPageTop extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        ActivityCardImage(),
+        Positioned(bottom: 10, child: ActivityCardText()),
+      ],
     );
   }
 }
@@ -70,7 +76,7 @@ class _RegistrationState extends State<Registration> {
                                           userActivities[activityId]);
 
                                   this._showDialog(context).then((val) {
-                                      this.setState(() {});
+                                    this.setState(() {});
                                   });
                                 },
                                 child: Text('Cancel',
@@ -85,7 +91,7 @@ class _RegistrationState extends State<Registration> {
                                       userActivity);
 
                                   this._showDialog(context).then((val) {
-                                      this.setState(() {});
+                                    this.setState(() {});
                                   });
                                 },
                                 child: Text('Register',
