@@ -29,6 +29,7 @@ class _MyAreaPageState extends State<MyAreaPage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColorDark,
         title: Text('My Area'),
       ),
       body: Scrollbar(

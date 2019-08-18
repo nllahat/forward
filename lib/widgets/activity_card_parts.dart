@@ -74,7 +74,7 @@ class ActivityCardText extends StatelessWidget {
                 fontSize: 24.0,
                 color: Colors.black),
           ),
-          FutureProvider<Color>.value(
+          /* FutureProvider<Color>.value(
               value: ColorsUtil().getTextColor(activity.image),
               catchError: (context, object) {
                 return Colors.white;
@@ -87,7 +87,7 @@ class ActivityCardText extends StatelessWidget {
                             fontWeight: FontWeight.normal,
                             fontSize: 16.0,
                             color: textColor ),
-                      )))
+                      ))) */
         ],
       ),
     );
@@ -98,9 +98,9 @@ class ActivityCardInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 25.0, bottom: 25.0),
-      margin: const EdgeInsets.only(right: 5.0, left: 5.0),
+      padding: const EdgeInsets.only(top: 25.0, bottom: 25.0, right: 5.0, left: 5.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -126,11 +126,19 @@ class ActivityCardInfoSmall extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          ActivityCardDetailsDay(),
+          ActivityCardDetailsDay(true),
+          VerticalDivider(
+            color: Colors.pink,
+            width: 1.0,
+          ),
           ActivityCardDetailsTime(),
+          VerticalDivider(
+            color: Colors.pink,
+            width: 1.0,
+          ),
           ActivityCardDetailsLocation(),
         ],
       ),
@@ -139,6 +147,9 @@ class ActivityCardInfoSmall extends StatelessWidget {
 }
 
 class ActivityCardDetailsDay extends StatelessWidget {
+  final bool isSmall;
+  ActivityCardDetailsDay(this.isSmall);
+
   @override
   Widget build(BuildContext context) {
     Activity activity = Provider.of<Activity>(context);
@@ -154,7 +165,7 @@ class ActivityCardDetailsDay extends StatelessWidget {
           children: <Widget>[
             Text(
               DateFormat('EEEE').format(activity.startDate),
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: this.isSmall ? 10.0 : 16.0),
             ),
             Text(
               DateFormat('LLLL d').format(activity.startDate),
@@ -166,6 +177,7 @@ class ActivityCardDetailsDay extends StatelessWidget {
     );
   }
 }
+
 
 class ActivityCardDetailsTime extends StatelessWidget {
   @override

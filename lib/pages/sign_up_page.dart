@@ -6,7 +6,7 @@ import 'package:forward/repositories/user_repository.dart';
 
 import 'package:forward/utils/validator_util.dart';
 import 'package:forward/widgets/app_form_date_picker.dart';
-import 'package:forward/widgets/app_form_radio_buttons.dart';
+import 'package:forward/widgets/radio_buttons.dart';
 import 'package:forward/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -110,7 +110,7 @@ class _SignUpPageState extends State<SignUpPage> {
       _signUpBirthDate = selectedBirthDate;
     });
 
-    final gender = AppFormRadioButtons(
+    final gender = RadioButtons(
         buttons: _genderGroup,
         onChangeButton: (int value) {
           _selectedGenderIndex = value;

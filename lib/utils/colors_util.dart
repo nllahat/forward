@@ -20,23 +20,18 @@ class ColorsUtil {
     // Sometimes dominantColor returns null
     // With black and white background colors in my tests
     if (dominantColor == null) {
-      print('Dominant Color null');
       return Colors.white;
     }
 
-    int d = 0;
-
-// Counting the perceptive luminance - human eye favors green color...
+    // Counting the perceptive luminance - human eye favors green color...
     double luminance = (0.299 * dominantColor.red +
             0.587 * dominantColor.green +
             0.114 * dominantColor.blue) /
         255;
 
     if (luminance > 0.5)
-      d = 0; // bright colors - black font
+      return Colors.black; // bright colors - black font
     else
-      d = 255; // dark colors - white font
-
-    return Color.fromARGB(dominantColor.alpha, d, d, d);
+      return Colors.white; // dark colors - white font
   }
 }

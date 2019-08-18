@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         builder: (_) => AuthRepository.instance(),
         child: MaterialApp(
           theme: ThemeData(
-            primarySwatch: Colors.grey,
+            primarySwatch: Colors.pink,
           ),
           routes: {
             '/': (context) =>

@@ -22,10 +22,10 @@ class ActivityMinimalCard extends StatelessWidget {
           children: <Widget>[
             Container(
               height: 120.0,
-              width: 75.0,
+              width: 55.0,
               color: Colors.pink,
               child: Center(
-                child: Icon(Icons.av_timer, color: Colors.white,),
+                child: Icon(Icons.watch_later, color: Colors.white,),
               ),
             ),
             Column(
