@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:forward/models/user_model.dart';
+import 'package:forward/core/models/user_model.dart';
 
 class UserRepository {
   static final Firestore _db = Firestore.instance;

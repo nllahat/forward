@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:forward/models/user_model.dart';
+import 'package:forward/core/models/user_model.dart';
 import 'package:forward/repositories/auth_repository.dart';
 import 'package:forward/repositories/user_repository.dart';
 

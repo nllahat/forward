@@ -12,8 +12,7 @@ class User {
   final Gender gender;
 
   User(
-      {
-      this.id,
+      {this.id,
       this.firstName,
       this.lastName,
       this.phoneNumber,

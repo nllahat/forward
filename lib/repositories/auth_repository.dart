@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:forward/models/user_model.dart';
+import 'package:forward/core/models/user_model.dart';
 import 'package:forward/repositories/user_repository.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 

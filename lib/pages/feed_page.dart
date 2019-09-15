@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:forward/models/activity_model.dart';
-import 'package:forward/models/organisation_model.dart';
-import 'package:forward/models/user_activity_model.dart';
+import 'package:forward/core/models/activity_model.dart';
+import 'package:forward/core/models/organisation_model.dart';
+import 'package:forward/core/models/user_activity_model.dart';
 import 'package:forward/repositories/auth_repository.dart';
 import 'package:forward/repositories/organisation_repository.dart';
 import 'package:forward/repositories/user_activity_repository.dart';

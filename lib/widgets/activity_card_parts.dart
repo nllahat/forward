@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:forward/models/activity_model.dart';
+import 'package:forward/core/models/activity_model.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -104,7 +104,7 @@ class ActivityCardInfo extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          ActivityCardDetailsDay(),
+          ActivityCardDetailsDay(false),
           VerticalDivider(
             color: Colors.pink,
             width: 1.0,

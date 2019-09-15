@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:forward/models/activity_model.dart';
-import 'package:forward/models/user_activity_model.dart';
+import 'package:forward/core/models/activity_model.dart';
+import 'package:forward/core/models/user_activity_model.dart';
 import 'package:forward/pages/activity_page.dart';
 import 'package:forward/pages/feed_page.dart';
 import 'package:forward/pages/login_page.dart';

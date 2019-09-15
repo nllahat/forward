@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:forward/models/activity_model.dart';
+import 'package:forward/core/models/activity_model.dart';
 import 'package:forward/widgets/activity_card_parts.dart';
 import 'package:provider/provider.dart';
 
